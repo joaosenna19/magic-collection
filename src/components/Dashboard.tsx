@@ -8,6 +8,7 @@ import {
   TableBody,
   Table,
 } from "@/components/ui/table";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 const Dashboard = () => {
   return (
@@ -16,7 +17,14 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold md:mx-10 mx-5">Collection</h1>
         <div className="flex space-x-2 mt-5 justify-between mx-auto md:mx-0">
           <Input className="" placeholder="Search your cards" />
-          <Button variant="outline" className="bg-gradient-to-r from-cyan-300 to-purple-400 text-bold">Add Card</Button>
+          <Link href={`/?addmodal=true`}>
+            <Button
+              variant="outline"
+              className="bg-gradient-to-r from-cyan-300 to-purple-400 text-bold"
+            >
+              Add Card
+            </Button>
+          </Link>
         </div>
       </div>
       <Table>
@@ -27,7 +35,6 @@ const Dashboard = () => {
             <TableHead>Set</TableHead>
             <TableHead>Condition</TableHead>
             <TableHead>Language</TableHead>
-       
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -37,7 +44,6 @@ const Dashboard = () => {
             <TableCell>Lotr</TableCell>
             <TableCell>Mint</TableCell>
             <TableCell>EN</TableCell>
-          
           </TableRow>
           <TableRow>
             <TableCell className="font-medium">2</TableCell>
@@ -45,13 +51,11 @@ const Dashboard = () => {
             <TableCell>Lotr</TableCell>
             <TableCell>Mint</TableCell>
             <TableCell>EN</TableCell>
-          
           </TableRow>
-          
         </TableBody>
       </Table>
     </div>
   );
-}
+};
 
 export default Dashboard;
