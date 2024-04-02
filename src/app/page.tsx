@@ -1,14 +1,15 @@
 import LogIn from "@/components/LogIn";
 import {auth} from "auth";
 import { redirect } from "next/navigation";
+import LogInPage from "@/components/LogInPage";
 
 export default async function Home() {
   const session = await auth();
   
   if(!session) {
   return (
-    <main className="flex  flex-col items-center justify-between">
-      <LogIn/>
+    <main>
+      <LogInPage/>
     </main>
   );
   }

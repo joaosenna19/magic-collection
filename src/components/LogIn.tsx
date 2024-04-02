@@ -1,13 +1,8 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
-
 const LogIn = () => {
-  const form = useForm();
+  
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
