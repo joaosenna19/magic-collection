@@ -1,10 +1,16 @@
 import Dashboard from "@/components/Dashboard";
- import { auth } from "auth";
+import NavBar from "@/components/NavBar";
+import { auth } from "auth";
+import { redirect } from "next/navigation";
 export default async function Collection() {
-    const session = await auth()
-    return (
+  const session = await auth();
+
+  if(!session) {
+    redirect("/");
+  }
+  return (
     <>
-        {session?.user?.name}
+      <NavBar />
       <Dashboard />
     </>
   );

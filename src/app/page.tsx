@@ -1,4 +1,3 @@
-import LogIn from "@/components/LogIn";
 import {auth} from "auth";
 import { redirect } from "next/navigation";
 import LogInPage from "@/components/LogInPage";

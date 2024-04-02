@@ -17,5 +17,6 @@ export const {
     }),
   ],
   adapter: PrismaAdapter(prisma),
+  secret: "testing",
   
 });
