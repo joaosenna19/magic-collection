@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AddCardsModal from "@/components/AddCardsModal";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,8 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}
-      <AddCardsModal/>
+      <body className={inter.className}>
+        <AddCardsModal />
+        {children}
       </body>
     </html>
   );

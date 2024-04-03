@@ -17,7 +17,7 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold md:mx-10 mx-5">Collection</h1>
         <div className="flex space-x-2 mt-5 justify-between mx-auto md:mx-0">
           <Input className="" placeholder="Search your cards" />
-          <Link href={`/?addmodal=true`}>
+          <Link href={`/collection?addmodal=true`}>
             <Button
               variant="outline"
               className="bg-gradient-to-r from-cyan-300 to-purple-400 text-bold"
