@@ -13,10 +13,10 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { searchCards } from "../../thirdPartyApiUtils";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, set } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -25,11 +25,13 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/ui/select";
+import CardDetails from "@/components/CardDetails";
 
 const AddCardsModal = () => {
   const searchParams = useSearchParams();
   const modal = searchParams.get("addmodal");
   const [results, setResults] = useState([] as any[]);
+  const [card, setCard] = useState({} as any);
 
   const cardSchema = z.object({
     name: z
@@ -40,14 +42,21 @@ const AddCardsModal = () => {
 
   type cardSchema = z.infer<typeof cardSchema>;
 
-  const { register, handleSubmit, formState, clearErrors } = useForm<cardSchema>({
-    resolver: zodResolver(cardSchema),
-  });
+  const { register, handleSubmit, formState, clearErrors, reset, setValue } =
+    useForm<cardSchema>({
+      resolver: zodResolver(cardSchema),
+    });
 
   const onSubmit: SubmitHandler<cardSchema> = async (data) => {
     clearErrors();
     const results = await searchCards(data.name);
+    console.log(results);
     setResults(results?.data || []);
+  };
+
+  const handleCardSelect = (card: any) => {
+    console.log(card);
+    setCard(card);
   };
 
   return (
@@ -62,38 +71,50 @@ const AddCardsModal = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
+              
               <form onSubmit={handleSubmit(onSubmit)} className="">
                 <div className="flex">
                   <Input
                     {...register("name")}
                     placeholder="Search for a card by name"
                   />
-                  
+
                   <Button type="submit" variant="outline" className="ml-2">
                     Search
                   </Button>
-                 
                 </div>
-                {formState.errors.name && (<p className="text-xs text-red-400 m-1">{formState.errors.name.message}</p>)}
+                {formState.errors.name && (
+                  <p className="text-xs text-red-400 m-1">
+                    {formState.errors.name.message}
+                  </p>
+                )}
               </form>
               {results.length > 0 ? (
-                <Select>
+                <Select
+                  onValueChange={(value) => handleCardSelect(value)}
+                  value={card}
+                >
                   <SelectTrigger className=" mt-2">
-                    <SelectValue placeholder="Select a card"/>
+                    <SelectValue placeholder="Select a card" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       {results.map((result, index) => (
-                        <SelectItem key={index} value={result.name}>{result.name}</SelectItem>
+                        <SelectItem key={index} value={result}>
+                          {result.name}
+                        </SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
               ) : null}
+              {card?.name && <CardDetails selectCard={card} />}
             </CardContent>
             <CardFooter className="flex justify-end">
               <Link href="/collection">
-                <Button variant="destructive" onClick={() => clearErrors()}>Cancel</Button>
+                <Button variant="destructive" onClick={() => reset()}>
+                  Cancel
+                </Button>
               </Link>
             </CardFooter>
           </div>
