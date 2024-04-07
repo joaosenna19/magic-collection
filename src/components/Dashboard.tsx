@@ -1,3 +1,4 @@
+'use client';
 import { Input } from "@/components/ui/input";
 
 import {
@@ -10,7 +11,23 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import CardRow from "./CardRow";
+
 const Dashboard = () => {
+  const [cards, setCards] = useState([]);
+
+  const fetchCards = async () => {
+    fetch("http://localhost:3000/api/cards")
+      .then((res) => res.json())
+      .then((data) => setCards(data));
+  };
+
+  useEffect(() => {
+    console.log(cards);
+    fetchCards();
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto my-8">
       <div className="flex flex-col justify-between  mb-4">
@@ -38,20 +55,7 @@ const Dashboard = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">2</TableCell>
-            <TableCell>Jirina Kudro</TableCell>
-            <TableCell>Lotr</TableCell>
-            <TableCell>Mint</TableCell>
-            <TableCell>EN</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">2</TableCell>
-            <TableCell>Meu nome e muito grande hahahahah</TableCell>
-            <TableCell>Lotr</TableCell>
-            <TableCell>Mint</TableCell>
-            <TableCell>EN</TableCell>
-          </TableRow>
+          {cards.map((card, index) => (<CardRow key={index} card={card} />))}
         </TableBody>
       </Table>
     </div>
