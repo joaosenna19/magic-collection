@@ -1,4 +1,11 @@
-import { Table, TableRow, TableCell } from "@/components/ui/table";
+import { TableRow, TableCell } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 type CardRowProps = {
   card: {
@@ -8,11 +15,10 @@ type CardRowProps = {
     condition: string;
     language: string;
     quantity: number;
-    imageUrl: string;
   };
 };
 const CardRow = (props: CardRowProps) => {
-  let { name, quantity, condition, language, set, imageUrl } = props.card;
+  let { name, quantity, condition, language, set } = props.card;
 
   return (
     <TableRow>
@@ -21,8 +27,11 @@ const CardRow = (props: CardRowProps) => {
       <TableCell>{set}</TableCell>
       <TableCell>{condition}</TableCell>
       <TableCell>{language}</TableCell>
+      <TableCell><Button variant="destructive" size="sm" className="">Delete</Button></TableCell>
     </TableRow>
   );
 };
 
 export default CardRow;
+
+

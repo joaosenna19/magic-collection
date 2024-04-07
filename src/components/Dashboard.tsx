@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -55,7 +55,9 @@ const Dashboard = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cards.map((card, index) => (<CardRow key={index} card={card} />))}
+          {cards.map((card, index) => (
+            <CardRow key={index} card={card} />
+          ))}
         </TableBody>
       </Table>
     </div>

@@ -57,6 +57,22 @@ const CardDetails = ({ selectCard }: any) => {
   const onSubmit: SubmitHandler<cardSchema> = async (data) => {
     clearErrors();
     console.log(data);
+    await fetch("/api/cards", {
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "There was an error adding the movie",
+          });
+        } else {
+          reset();
+        }
+      });
     toast({
       title: "Card added",
       description: "The card was successfully  added to your collection",
