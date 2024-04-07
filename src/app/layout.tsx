@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AddCardsModal from "@/components/AddCardsModal";
 import { Toaster } from "@/components/ui/toaster";
+import DeleteModal from "@/components/DeleteModa";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AddCardsModal />
+        <DeleteModal />
         {children}
         <Toaster />
       </body>

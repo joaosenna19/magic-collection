@@ -1,11 +1,6 @@
 import { TableRow, TableCell } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type CardRowProps = {
   card: {
@@ -18,7 +13,7 @@ type CardRowProps = {
   };
 };
 const CardRow = (props: CardRowProps) => {
-  let { name, quantity, condition, language, set } = props.card;
+  let { id, name, quantity, condition, language, set } = props.card;
 
   return (
     <TableRow>
@@ -27,11 +22,15 @@ const CardRow = (props: CardRowProps) => {
       <TableCell>{set}</TableCell>
       <TableCell>{condition}</TableCell>
       <TableCell>{language}</TableCell>
-      <TableCell><Button variant="destructive" size="sm" className="">Delete</Button></TableCell>
+      <TableCell>
+        <Link href={`/collection?deletemodal=true&id=${id}`}>
+          <Button variant="destructive" size="sm">
+            Delete
+          </Button>
+        </Link>
+      </TableCell>
     </TableRow>
   );
 };
 
 export default CardRow;
-
-
