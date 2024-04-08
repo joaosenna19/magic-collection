@@ -81,24 +81,4 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
-  try {
-    const searchParams = req.nextUrl.searchParams;
-    const query = searchParams.get("id");
-    const { quantity, condition, language } = await req.json();
-    const updatedCard = await prisma.card.update({
-      where: {
-        id: query ?? undefined,
-      },
-      data: {
-        quantity,
-        condition,
-        language,
-      },
-    });
-    return Response.json(updatedCard);
-  } catch (error) {
-    console.error(error);
-    return Response.error();
-  }
-}
+

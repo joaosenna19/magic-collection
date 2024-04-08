@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler, set } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -23,19 +23,36 @@ const CardDetails = ({ selectCard }: any) => {
     quantity: z.coerce
       .number()
       .positive({ message: "Must be greater than zero" }),
-    condition: z.enum(["M", "NM", "SP", "MP", "HP", "DMG"]),
-    language: z.enum([
-      "English",
-      "Japanese",
-      "Korean",
-      "Chinese",
-      "Spanish",
-      "French",
-      "German",
-      "Italian",
-      "Portuguese",
-      "Russian",
-    ]),
+    condition: z.enum(["M", "NM", "SP", "MP", "HP", "DMG"], {
+      errorMap: (issue, ctx) => {
+        return {
+          message:
+            "Accepted conditios: M, NM, SP, MP, HP, DMG",
+        };
+      },
+    }),
+    language: z.enum(
+      [
+        "English",
+        "Japanese",
+        "Korean",
+        "Chinese",
+        "Spanish",
+        "French",
+        "German",
+        "Italian",
+        "Portuguese",
+        "Russian",
+      ],
+      {
+        errorMap: (issue, ctx) => {
+          return {
+            message:
+              "Accepted languages: English, Japanese, Korean, Chiense, Spanish, French, Italian, Portuguese and Russian",
+          };
+        },
+      }
+    ),
     set: z.string().min(1).max(100),
     imageUrl: z.string().url(),
   });
@@ -49,16 +66,12 @@ const CardDetails = ({ selectCard }: any) => {
       resolver: zodResolver(cardSchema),
       defaultValues: {
         userId: searchParams.get("userId") as string,
-        quantity: 1,
-        condition: "NM",
-        language: "English",
         imageUrl: selectCard.image_uris.small,
       },
     });
 
   const { toast } = useToast();
   const router = useRouter();
-  
 
   const onSubmit: SubmitHandler<cardSchema> = async (data) => {
     clearErrors();
@@ -111,10 +124,18 @@ const CardDetails = ({ selectCard }: any) => {
           className="rounded-lg"
         />
       </div>
-      <p></p>
+
       <div className="space-y-2">
         <Label>Name</Label>
         <Input readOnly {...register("name")} placeholder={selectCard.name} />
+        {formState.errors.name && (
+          <p
+            className="text-xs text-red-400 m-1 text-center"
+            style={{ fontSize: "0.50rem" }}
+          >
+            {formState.errors.name.message}
+          </p>
+        )}
       </div>
       <div className="grid grid-cols-4 ">
         <div className="space-y-2 mr-2">
@@ -136,44 +157,40 @@ const CardDetails = ({ selectCard }: any) => {
             {...register("set")}
             placeholder={selectCard.set_name}
           ></Input>
+          {formState.errors.set && (
+            <p
+              className="text-xs text-red-400 m-1 text-center"
+              style={{ fontSize: "0.50rem" }}
+            >
+              {formState.errors.set.message}
+            </p>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-4 ">
         <div className="space-y-2 mr-2 ">
           <Label>Language</Label>
-          <Select {...register("language")}>
-            <SelectTrigger>
-              <SelectValue placeholder="EN" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="English">EN</SelectItem>
-              <SelectItem value="Japanese">JP</SelectItem>
-              <SelectItem value="Korean">KR</SelectItem>
-              <SelectItem value="Chinese">CH</SelectItem>
-              <SelectItem value="Spanish">SP</SelectItem>
-              <SelectItem value="French">FR</SelectItem>
-              <SelectItem value="German">GR</SelectItem>
-              <SelectItem value="Italian">IT</SelectItem>
-              <SelectItem value="Portuguese">PR</SelectItem>
-              <SelectItem value="Russian">RU</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input {...register("language")} />
+          {formState.errors.language && (
+            <p
+              className="text-xs text-red-400 m-1 text-center"
+              style={{ fontSize: "0.50rem" }}
+            >
+              {formState.errors.language.message}
+            </p>
+          )}
         </div>
         <div className="space-y-2 col-span-3">
           <Label>Condition</Label>
-          <Select {...register("condition")}>
-            <SelectTrigger className=" mt-2">
-              <SelectValue placeholder="Mint" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="M">Mint</SelectItem>
-              <SelectItem value="NM">Near Mint</SelectItem>
-              <SelectItem value="SP">Slightly Played</SelectItem>
-              <SelectItem value="MP">Moderately Played</SelectItem>
-              <SelectItem value="HP">Heavily Played</SelectItem>
-              <SelectItem value="DMG">Damaged</SelectItem>
-            </SelectContent>
-          </Select>
+          <Input {...register("condition")} />
+          {formState.errors.condition && (
+            <p
+              className="text-xs text-red-400 m-1 text-center"
+              style={{ fontSize: "0.50rem" }}
+            >
+              {formState.errors.condition.message}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex justify-end mt-2">

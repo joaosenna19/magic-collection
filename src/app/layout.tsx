@@ -4,6 +4,8 @@ import "./globals.css";
 import AddCardsModal from "@/components/AddCardsModal";
 import { Toaster } from "@/components/ui/toaster";
 import DeleteModal from "@/components/DeleteModal";
+import { Edit } from "lucide-react";
+import EditCardModal from "@/components/EditCardModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +23,7 @@ export default async function asyncRootLayout({
       <body className={inter.className}>
         <AddCardsModal />
         <DeleteModal />
+        <EditCardModal />
         {children}
         <Toaster />
       </body>
