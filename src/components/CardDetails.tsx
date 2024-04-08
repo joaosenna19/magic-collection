@@ -14,9 +14,11 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const CardDetails = ({ selectCard }: any) => {
   const cardSchema = z.object({
+    userId: z.string(),
     name: z.string().min(1).max(100),
     quantity: z.coerce
       .number()
@@ -40,10 +42,13 @@ const CardDetails = ({ selectCard }: any) => {
 
   type cardSchema = z.infer<typeof cardSchema>;
 
+  const searchParams = useSearchParams();
+
   const { register, handleSubmit, formState, clearErrors, setValue, reset } =
     useForm<cardSchema>({
       resolver: zodResolver(cardSchema),
       defaultValues: {
+        userId: searchParams.get("userId") as string,
         quantity: 1,
         condition: "NM",
         language: "English",
@@ -53,31 +58,40 @@ const CardDetails = ({ selectCard }: any) => {
 
   const { toast } = useToast();
   const router = useRouter();
+  
 
   const onSubmit: SubmitHandler<cardSchema> = async (data) => {
     clearErrors();
-    console.log(data);
-    await fetch("/api/cards", {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "There was an error adding the movie",
-          });
-        } else {
-          reset();
-        }
+    try {
+      await fetch("/api/cards", {
+        method: "POST",
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: "There was an error adding the card",
+            });
+          } else {
+            reset();
+          }
+        });
+      toast({
+        title: "Card added",
+        description: "The card was successfully  added to your collection",
       });
-    toast({
-      title: "Card added",
-      description: "The card was successfully  added to your collection",
-    });
-    router.push("/collection");
+      router.push("/collection");
+    } catch {
+      console.error();
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "There was an error adding the card",
+      });
+    }
   };
 
   const sanitazeData = () => {
@@ -97,7 +111,7 @@ const CardDetails = ({ selectCard }: any) => {
           className="rounded-lg"
         />
       </div>
-
+      <p></p>
       <div className="space-y-2">
         <Label>Name</Label>
         <Input readOnly {...register("name")} placeholder={selectCard.name} />

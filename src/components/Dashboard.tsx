@@ -5,7 +5,6 @@ import {
   TableHead,
   TableRow,
   TableHeader,
-  TableCell,
   TableBody,
   Table,
 } from "@/components/ui/table";
@@ -14,17 +13,16 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import CardRow from "./CardRow";
 
-const Dashboard = () => {
+const Dashboard = ({ userId }: { userId: string }) => {
   const [cards, setCards] = useState([]);
 
   const fetchCards = async () => {
-    fetch("http://localhost:3000/api/cards")
-      .then((res) => res.json())
-      .then((data) => setCards(data));
+    const response = await fetch(`/api/cards?userId=${userId}`);
+    const data = await response.json();
+    setCards(data);
   };
 
   useEffect(() => {
-    console.log(cards);
     fetchCards();
   }, []);
 
@@ -34,7 +32,7 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold md:mx-10 mx-5">Collection</h1>
         <div className="flex space-x-2 mt-5 justify-between mx-auto md:mx-0">
           <Input className="" placeholder="Search your cards" />
-          <Link href={`/collection?addmodal=true`}>
+          <Link href={`/collection?addmodal=true&userId=${userId}`}>
             <Button
               variant="outline"
               className="bg-gradient-to-r from-cyan-300 to-purple-400 text-bold"

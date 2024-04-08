@@ -4,14 +4,15 @@ import { auth } from "auth";
 import { redirect } from "next/navigation";
 export default async function Collection() {
   const session = await auth();
+  const userId = session?.user?.id as string;
 
-  if(!session) {
+  if (!session) {
     redirect("/");
   }
   return (
     <>
       <NavBar />
-      <Dashboard />
+      <Dashboard userId={userId} />
     </>
   );
 }

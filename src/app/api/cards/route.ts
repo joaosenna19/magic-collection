@@ -1,9 +1,18 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/db/db";
 
-export async function GET() {
+
+
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const userId = searchParams.get("userId");
   try {
-    const cards = await prisma.card.findMany();
+    const cards = await prisma.card.findMany({
+      where: {
+        userId: userId as string, 
+      },
+    }
+    );
     console.log(cards);
     return Response.json(cards);
   } catch (error) {
@@ -13,20 +22,43 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+
   try {
-    const { name, quantity, condition, language, set, imageUrl } =
+    const { userId, name, quantity, condition, language, set, imageUrl } =
       await req.json();
-    const newCard = await prisma.card.create({
-      data: {
+    const existingCard = await prisma.card.findFirst({
+      where: {
+        userId,
         name,
-        quantity,
         condition,
         language,
         set,
-        imageUrl,
       },
     });
-    return Response.json(newCard);
+    if (existingCard) {
+      const updatedCard = await prisma.card.update({
+        where: {
+          id: existingCard.id,
+        },
+        data: {
+          quantity: quantity,
+        },
+      });
+      return Response.json(updatedCard);
+    } else {
+      const newCard = await prisma.card.create({
+        data: {
+          userId,
+          name,
+          quantity,
+          condition,
+          language,
+          set,
+          imageUrl,
+        },
+      });
+      return Response.json(newCard);
+    }
   } catch (error) {
     console.error(error);
     return Response.error();
@@ -39,7 +71,7 @@ export async function DELETE(req: NextRequest) {
     const query = searchParams.get("id");
     const deletedCard = await prisma.card.delete({
       where: {
-        id: query ?? undefined,
+        id: query as string,
       },
     });
     return Response.json(deletedCard);

@@ -71,7 +71,6 @@ const AddCardsModal = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              
               <form onSubmit={handleSubmit(onSubmit)} className="">
                 <div className="flex">
                   <Input
