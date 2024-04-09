@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/db";
 import Google from "next-auth/providers/google";
@@ -15,5 +14,5 @@ export const {
     }),
   ],
   adapter: PrismaAdapter(prisma),
-  secret: "testing",
+  secret: process.env.SECRET,
 });
