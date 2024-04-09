@@ -18,7 +18,7 @@ const CardRow = (props: CardRowProps) => {
   return (
     <TableRow>
       <TableCell className="font-medium">{quantity}</TableCell>
-      <Link href={`collection?editmodal=true&id=${id}`}>
+      <Link href={`collection?editmodal=true&id=${id}&quantity=${quantity}&condition=${condition}&language=${language}`}>
       <TableCell className="underline">{name}</TableCell>
       </Link>
       <TableCell>{set}</TableCell>
