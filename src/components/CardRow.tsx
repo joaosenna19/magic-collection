@@ -1,6 +1,13 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import Image from "next/image";
 
 type CardRowProps = {
   card: {
@@ -10,17 +17,31 @@ type CardRowProps = {
     condition: string;
     language: string;
     quantity: number;
+    imageUrl: string;
   };
 };
 const CardRow = (props: CardRowProps) => {
-  let { id, name, quantity, condition, language, set } = props.card;
+  let { id, name, quantity, condition, language, set, imageUrl } = props.card;
 
   return (
     <TableRow>
       <TableCell className="font-medium">{quantity}</TableCell>
-      <Link href={`collection?editmodal=true&id=${id}&quantity=${quantity}&condition=${condition}&language=${language}`}>
-      <TableCell className="underline">{name}</TableCell>
-      </Link>
+
+      <TableCell className="underline">
+        <Link
+          href={`collection?editmodal=true&id=${id}&quantity=${quantity}&condition=${condition}&language=${language}`}
+        >
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger> {name} </TooltipTrigger>
+              <TooltipContent>
+                <Image src={imageUrl} width="160" height="160" alt=""></Image>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </Link>
+      </TableCell>
+
       <TableCell>{set}</TableCell>
       <TableCell>{condition}</TableCell>
       <TableCell>{language}</TableCell>

@@ -97,13 +97,15 @@ const EditCardModal = () => {
 
   type cardSchema = z.infer<typeof cardSchema>;
 
+  console.log(card.condition, card.language);
+
   const { register, handleSubmit, formState, clearErrors, reset } =
     useForm<cardSchema>({
       resolver: zodResolver(cardSchema),
       defaultValues: {
         quantity: card.quantity,
-        condition: card.condition as cardSchema["condition"] | undefined,
-        language: card.language as cardSchema["language"] | undefined,
+        condition: card.condition as cardSchema["condition"] ,
+        language: card.language as cardSchema["language"],
       },
     });
 
